@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# Locate and import istty dependency
+if ! type istty >/dev/null 2>&1; then
+	if path="$(which istty)"; then
+		. "$path"
+	elif [ -x ./istty ]; then
+		. ./istty
+	fi
+fi
+
+gitgrep() {
+    if istty; then
+        grep --binary-files=without-match --exclude-dir=.git -n --color=always "$@" -R . | less -RS
+    else
+        grep --binary-files=without-match --exclude-dir=.git -n "$@" -R .
+    fi
+}
+
+if [ "$(basename "$0")" = "gitgrep" ]; then
+	gitgrep "$@"
+fi
