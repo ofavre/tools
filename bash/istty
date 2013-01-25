@@ -1,0 +1,10 @@
+#!/bin/bash
+
+istty() {
+    [[ -t 0 || -p /dev/stdin ]]
+    return $?
+}
+
+if [ "$(basename "$0")" = "istty" ]; then
+	istty "$@"
+fi
