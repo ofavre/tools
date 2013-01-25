@@ -1,0 +1,12 @@
+#!/bin/bash
+
+args() {
+    while [ $# -gt 0 ]; do
+	echo "$1"
+	shift
+    done
+}
+
+if [ "$(basename "$0")" = "args" ]; then
+	args "$@"
+fi
