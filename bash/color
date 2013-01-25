@@ -1,0 +1,52 @@
+#!/bin/bash
+
+color() {
+    if [ $# == 0 ]; then
+	echo "Usage: $0 [pattern 1] [pattern 2] [pattern 3] [pattern 4] [pattern 5] [pattern 6]" >&2
+	echo "Colorizes the input, uses sed." >&2
+	echo "Beware of patterns that can match \"\x1B[1;30m\", don't use them except as first pattern!" >&2
+	echo "Also make sure to properly escape your patterns." >&2
+    elif [ $# == 1 ]; then
+        sed -u -e "s/\($1\)/\x1B[1;31m\\1\x1B[m/g"
+    elif [ $# == 2 ]; then
+        sed -u -e "s/\($1\)/\x1B[1;31m\\1\x1B[m/g" \
+	       -e "s/\($2\)/\x1B[1;32m\\1\x1B[m/g"
+    elif [ $# == 3 ]; then
+        sed -u -e "s/\($1\)/\x1B[1;31m\\1\x1B[m/g" \
+	       -e "s/\($2\)/\x1B[1;32m\\1\x1B[m/g" \
+	       -e "s/\($3\)/\x1B[1;33m\\1\x1B[m/g"
+    elif [ $# == 4 ]; then
+        sed -u -e "s/\($1\)/\x1B[1;31m\\1\x1B[m/g" \
+	       -e "s/\($2\)/\x1B[1;32m\\1\x1B[m/g" \
+	       -e "s/\($3\)/\x1B[1;33m\\1\x1B[m/g" \
+	       -e "s/\($4\)/\x1B[1;34m\\1\x1B[m/g"
+    elif [ $# == 5 ]; then
+        sed -u -e "s/\($1\)/\x1B[1;31m\\1\x1B[m/g" \
+	       -e "s/\($2\)/\x1B[1;32m\\1\x1B[m/g" \
+	       -e "s/\($3\)/\x1B[1;33m\\1\x1B[m/g" \
+	       -e "s/\($4\)/\x1B[1;34m\\1\x1B[m/g" \
+	       -e "s/\($5\)/\x1B[1;35m\\1\x1B[m/g"
+    elif [ $# == 6 ]; then
+        sed -u -e "s/\($1\)/\x1B[1;31m\\1\x1B[m/g" \
+	       -e "s/\($2\)/\x1B[1;32m\\1\x1B[m/g" \
+	       -e "s/\($3\)/\x1B[1;33m\\1\x1B[m/g" \
+	       -e "s/\($4\)/\x1B[1;34m\\1\x1B[m/g" \
+	       -e "s/\($5\)/\x1B[1;35m\\1\x1B[m/g" \
+	       -e "s/\($6\)/\x1B[1;36m\\1\x1B[m/g"
+    elif [ $# == 7 ]; then
+        sed -u -e "s/\($1\)/\x1B[1;31m\\1\x1B[m/g" \
+	       -e "s/\($2\)/\x1B[1;32m\\1\x1B[m/g" \
+	       -e "s/\($3\)/\x1B[1;33m\\1\x1B[m/g" \
+	       -e "s/\($4\)/\x1B[1;34m\\1\x1B[m/g" \
+	       -e "s/\($5\)/\x1B[1;35m\\1\x1B[m/g" \
+	       -e "s/\($6\)/\x1B[1;36m\\1\x1B[m/g" \
+	       -e "s/\($7\)/\x1B[1;37m\\1\x1B[m/g"
+    elif [ $# -gt 7 ]; then
+	echo "Too many parameters!" >&2
+    fi
+}
+
+
+if [ "$(basename "$0")" = "color" ]; then
+	color "$@"
+fi
