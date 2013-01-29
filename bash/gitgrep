@@ -19,4 +19,7 @@ gitgrep() {
 
 if [ "$(basename "$0")" = "gitgrep" ]; then
 	gitgrep "$@"
+elif type _longopt >/dev/null 2>&1; then
+	# Bash completion
+	complete -F _longopt gitgrep
 fi
