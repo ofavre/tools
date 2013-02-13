@@ -1,0 +1,17 @@
+#!/bin/bash
+
+clip() {
+    if [ "$1" == "--help" -o "$1" == "-h" ]; then
+        echo "Usage: clip [file]" >&1
+        echo "       clip -o" >&1
+	echo "Tiny wrapper around xclip, merely adding \`\`-selection clipboard'' argument." >&1
+	echo "    [file]     Sets clipboard content with the given file, or standard input." >&1
+	echo "    -o         Outputs clipboard content." >&1
+        return
+    fi
+    xclip -selection clipboard "$@"
+}
+
+if [ "$(basename "$0")" = "clip" ]; then
+	clip "$@"
+fi
