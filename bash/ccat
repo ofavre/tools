@@ -1,0 +1,13 @@
+#!/bin/sh
+
+if [ ! -t 0 ];then
+  file=/dev/stdin
+elif [ -f "$1" ];then
+  file="$1"
+else
+  echo "Usage: $0 [file]"
+  echo "Pygmentizes the given file, or the standard input."
+  exit 1
+fi
+
+pygmentize -f terminal -O bg=dark -g "$file"
