@@ -1,0 +1,29 @@
+#!/bin/bash
+
+urldecode() {
+    if [ "$1" == "-h" -o "$1" == "--help" ]; then
+        echo "Usage: $0 --raw [value] ..." >&2
+        echo "Decode a percent encoded value, just like PHP's urldecode() function would do" >&2
+        echo "    --raw    Follow RFC 3986, ie. do not decode \`+' into a space" >&2
+    fi
+    declare -a RULES
+    if [ "$1" == "--raw" ]; then
+        RULES=()
+        shift
+    else
+        RULES=('-e' 's/+/ /g')
+    fi
+    RULES=("${RULES[@]}" '-e' 's/%/\\x/g' '-e' 's/$/\\n/g')
+    if [ $# == 0 ]; then
+        cat
+    else
+        while [ "$#" -gt 0 ]; do
+            echo "$1"
+            shift
+        done 
+    fi | sed "${RULES[@]}" | xargs -d '\n' -l printf
+}
+
+if [ "$(basename "$0")" = "urldecode" ]; then
+    urldecode "$@"
+fi
