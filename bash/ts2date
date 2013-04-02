@@ -1,0 +1,45 @@
+#!/bin/bash
+
+ts2date() {
+	units=("seconds" "milliseconds" "microseconds" "nanoseconds")
+	args=()
+	while [ $# -gt 0 ]; do
+		case "$1" in
+			-h|--help)
+				echo "Usage: ts2date [DATE OPTIONS] timestamp ..."
+				echo "Convert timestamps to dates."
+				echo "You can mix options and timestamps, and give multiple of each, they'll be treated sequencially."
+				echo ""
+				echo "    DATE OPTIONS    Any \`-' or \`+' prefixed option accepted by date(1)."
+				echo "    timestamp       The timestamp to be converted."
+				echo "                    Automatic selection between seconds, milliseconds, microseconds, and nanoseconds."
+				return
+				;;
+			[+-]*)
+				args[${#args}+1]="$1"
+				;;
+			*)
+				ts="$1"
+				shifted=0
+				while [ "${#ts}" -gt 10 ]; do
+					(( ts /= 1000 ))
+					(( shifted++ ))
+				done
+				if [ $shifted -ne 0 ]; then
+					echo "Number too high, taken as ${units[$shifted]}" >&2
+				fi
+				if [ "${#args[@]}" -gt 0 ]; then
+					date "${args[@]}" --date=@$ts
+				else
+					date --date=@$ts
+				fi
+				;;
+		esac
+		shift
+	done
+}
+
+
+if [ "$(basename "$0")" = "ts2date" ]; then
+	ts2date "$@"
+fi
