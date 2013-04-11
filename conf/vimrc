@@ -46,6 +46,7 @@ hi LineNr cterm=bold ctermfg=darkgray
 hi CursorLine cterm=NONE ctermbg=blue
 hi CursorColumn cterm=NONE ctermbg=blue
 map <F2> :set cursorline! cursorcolumn!<CR>
+set pastetoggle=<F3>
 
 " Auto configure the buffer with modeline
 set modeline
