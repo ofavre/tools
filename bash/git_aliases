@@ -6,6 +6,10 @@ autoprefixed_git() {
     COMP_WORDS=('git' "${COMP_WORDS[@]}")
     COMP_WORDS[1]="${COMP_WORDS[1]#$1}"
     ((++COMP_CWORD))
+    # Lazy load git completions if needed
+    if ! type _git >/dev/null 2>&1; then
+        . /usr/share/bash-completion/completions/git
+    fi
     _git
 }
 
@@ -35,6 +39,6 @@ git_aliases() {
 }
 
 if [ "$(basename "$0")" = "git_aliases" ]; then
-	# Install the aliases
-	git_aliases
+    # Install the aliases
+    git_aliases
 fi
