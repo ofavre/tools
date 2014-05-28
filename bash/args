@@ -2,7 +2,7 @@
 
 args() {
     while [ $# -gt 0 ]; do
-	echo "$1"
+	printf "%s\n" "$1"
 	shift
     done
 }
