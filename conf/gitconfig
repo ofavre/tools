@@ -2,6 +2,9 @@
 	ui = true
 [core]
 	pager = less -+$LESS -RS
+[diff]
+	noprefix
+	renames = copies
 [grep]
 	lineNumber = true
 	extendedRegexp = true
