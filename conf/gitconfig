@@ -21,6 +21,9 @@
 	sa = status -uall
 	c = commit
 	ca = commit --amend
+	cm = commit -m
+	cam = commit -a -m
+	cp = cherry-pick
 	d = diff
 	dc = diff --cached
 	wd = diff --color-words
@@ -36,3 +39,8 @@
 	ai = add -i
 	rv = remote -v
 	l = log
+	ff = merge --ff-only
+	f = fetch
+	rb = rebase --committer-date-is-author-date
+	rbom = rebase --committer-date-is-author-date origin/master
+	pom = push origin master
