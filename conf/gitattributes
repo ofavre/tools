@@ -1,0 +1,63 @@
+# INSTALLING:
+# Drop in .git/info/attributes, or a tracked target folder (like .gitignore), or ~/.config/git/attributes
+
+#
+# Diff language drivers
+#
+
+*.ads diff=ada
+*.adb diff=ada
+*.ada diff=ada
+
+*.bib diff=bibtex
+*.tex diff=tex
+
+*.c   diff=cpp
+*.h   diff=cpp
+*.hdl diff=cpp
+*.cpp diff=cpp
+*.hpp diff=cpp
+*.cxx diff=cpp
+*.hxx diff=cpp
+
+*.cs diff=csharp
+
+*.f   diff=fortran
+*.for diff=fortran
+*.f90 diff=fortran
+*.f95 diff=fortran
+
+*.htm  diff=html
+*.html diff=html
+
+*.java diff=java
+
+#*.m diff=matlab
+
+*.m  diff=objc
+*.mm diff=objc
+#*.h  diff=objc
+
+*.p      diff=pascal
+*.pp     diff=pascal
+*.pas    diff=pascal
+*.pascal diff=pascal
+*.lpr    diff=pascal
+
+*.pl  diff=perl
+*.pm  diff=perl
+*.t   diff=perl
+*.pod diff=perl
+
+*.php diff=php
+*.phtml diff=php
+*.php3l diff=php
+*.php4l diff=php
+*.php5l diff=php
+*.phpsl diff=php
+
+*.py  diff=python
+*.pyw diff=python
+
+*.rb  diff=ruby
+*.rbw diff=ruby
