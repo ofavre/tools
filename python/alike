@@ -121,12 +121,15 @@ def alike(string, length = None, alphabet = None, verbose = False):
 
 def alikeFromArgs(argv = None, **kwargs):
     args = parseArgs(argv, **kwargs)
-    string = alike(
+    return alike(
             args.string,
             length = args.length,
             alphabet = args.alphabet,
             verbose = args.verbose)
-    print string
 
 if __name__ == '__main__':
-    alikeFromArgs(sys.argv[1:])
+    string = alikeFromArgs(sys.argv[1:])
+    if string is None:
+        sys.exit(1)
+    else:
+        print string
