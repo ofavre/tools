@@ -1,0 +1,132 @@
+#!/usr/bin/env python2
+# -*- coding: utf-8 -*-
+# vim: ts=4 sts=4 sw=4 et
+
+import re
+import sys
+import random
+import collections
+
+try:
+    import argparse # `easy_install argparse` or `pip install argparse`
+except:
+    print 'Cannot find library "argparse"!'
+    print 'Please do either:'
+    print '    sudo apt-get install python-argparse'
+    print '    sudo easy_install argparse'
+    print '    sudo pip install argparse'
+    print '    Go to https://pypi.python.org/pypi/argparse'
+    sys.exit(1)
+
+# Supported alphabets, ordered by detection priority.
+# Aliases are supported by using the name of another key as value.
+# BEWARE: Alias loops are not detected!
+builtinAlphabets = collections.OrderedDict([
+    ('digits',          '0-9'),
+    ('letters',         'a-z'),
+    ('LETTERS',         'A-Z'),
+    ('BASE32',          'A-Z2-7'),
+    ('B32',             'BASE32'),
+    ('BASE-32',         'BASE32'),
+    ('hex',             '0-9a-f'),
+    ('HEX',             '0-9A-F'),
+    ('base64',          '0-9A-Za-z+/'),
+    ('base64url',       '0-9A-Za-z-_'),
+    # No autodetection after this entry
+    (None,              None),
+    ('geohash',         '0-9b-hjkmnp-z'),
+])
+
+def parseArgs(argv = None, **kwargs):
+    parser = argparse.ArgumentParser(
+            formatter_class=argparse.RawDescriptionHelpFormatter,
+            conflict_handler='resolve',
+            description='String-like-this generator',
+            epilog='''\
+Generates a string using the same length and alphabet than the input string.
+Automatically detects the alphabet.''')
+    parser.add_argument('-l', '--length', action='store', type=int, dest='length', help='Length of the generated string')
+    parser.add_argument('-a', '--alphabet', action='store', type=str, dest='alphabet', help='The allowed alphabet, either as a builtin alphabet name, or regex-like character ranges.\nEg.: For GeoHashes use "0-9b-hjkmnp-z" to represent all digits and lowercase letters but a, i, l and o.')
+    parser.add_argument('-v', '--verbose', action='store_true', dest='verbose', help='Controls verbosity')
+    parser.add_argument('string', type=str, nargs='?', help='The input string to mimic')
+    if argv is None:
+        argv = sys.argv[1:]
+    argv_toParse = argv[:]
+    argv_toParse.extend(['--%s' % key.replace('_', '-') for key, value in kwargs.iteritems() if value == True])
+    argv_toParse.extend(['--%s=%s' % (key.replace('_', '-'), value) for key, value in kwargs.iteritems() if type(value) != bool])
+    args = parser.parse_args(argv_toParse)
+    return args
+
+def inferAlphabet(string):
+    '''Returns the name of the first corresponding builtin alphabet.'''
+    checkedAlphabets = set()
+    for name, alphabet in builtinAlphabets.iteritems():
+        if name is None:
+            # End of autodetection marker
+            break
+        # Resolve aliases (don't ignore them to keep correct priority)
+        while alphabet in builtinAlphabets:
+            name = alphabet
+            alphabet = builtinAlphabets[name]
+        if name in checkedAlphabets:
+            # Don't work multiple times on aliased alphabets
+            continue
+        checkedAlphabets.add(name)
+        if re.match('^[' + alphabet + ']+$', string):
+            return name
+    return None
+
+def expandAlphabet(alphabet):
+    '''Expands the compact range-based representation of an alphabet.'''
+    chars = []
+    prevChar = None
+    startRange = False
+    for c in alphabet:
+        if startRange:
+            startRange = False
+            chars.extend(chr(i) for i in xrange(ord(prevChar)+1, ord(c)+1))
+            prevChar = None
+        elif c == '-' and prevChar is not None:
+            startRange = True
+        else:
+            chars.append(c)
+            prevChar = c
+    if startRange:
+        chars.append('-')
+    return ''.join(chars)
+
+def alike(string, length = None, alphabet = None, verbose = False):
+    if string is None and (length is None or alphabet is None):
+        sys.stderr.write('Either an input string or both a length and alphabet is required.\n')
+        return None
+    if length is None:
+        length = len(string)
+        if verbose is True:
+            sys.stderr.write('Using input string length: %d\n' % length)
+    if alphabet is None:
+        alphabet = inferAlphabet(string)
+        if alphabet is None:
+            sys.stderr.write('No matching alphabet found, using the input string.\n')
+            # Take the input string as an alphabet, preserves characters frequencies in output
+            # and permits giving an alphabet name as the string to generate (although base64 will likely be inferred instead).
+            alphabet = string
+        else:
+            if verbose is True:
+                sys.stderr.write('Found matching alphabet: %s\n' % alphabet)
+    if alphabet in builtinAlphabets:
+        while alphabet in builtinAlphabets: # handles alias chains, BEWARE OF LOOPS!
+            alphabet = builtinAlphabets[alphabet]
+    chars = expandAlphabet(alphabet)
+    return ''.join(random.choice(chars) for _ in xrange(length))
+
+def alikeFromArgs(argv = None, **kwargs):
+    args = parseArgs(argv, **kwargs)
+    string = alike(
+            args.string,
+            length = args.length,
+            alphabet = args.alphabet,
+            verbose = args.verbose)
+    print string
+
+if __name__ == '__main__':
+    alikeFromArgs(sys.argv[1:])
