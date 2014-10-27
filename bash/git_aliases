@@ -23,7 +23,7 @@ git_aliases() {
     prefixes=('' 'g' 'git') # must have the associated _${prefix}_prefixed_git() functions
     local git_commands="$(
         ( LC_ALL="C" git help --all | awk 'BEGIN { bin=0 }; bin==2 && /^$/ { bin=0 }; /^  [^ ]/ { bin = 2; for(i=1;i<=NF;++i) print $i } ; bin==0 && /^available git commands/ { bin=1 }'
-          git config --global --get-regexp 'alias\..*' | sed -r -e 's/^alias\.([^ ]*) .*$/\1/'
+          git config --global --get-regexp 'alias\..*' | sed -e 's/^alias\.\([^ ]*\) .*$/\1/'
         ) | sort
     )"
     for prefix in "${prefixes[@]}"; do
@@ -38,7 +38,7 @@ git_aliases() {
     done
 }
 
-if [ "$(basename "$0")" = "git_aliases" ]; then
+if [ "$(basename -- "$0")" = "git_aliases" ]; then
     # Install the aliases
     git_aliases
 fi
