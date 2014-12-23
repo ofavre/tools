@@ -7,6 +7,6 @@ args() {
     done
 }
 
-if [ "$(basename "$0")" = "args" ]; then
+if [ "$(basename -- "$0")" = "args" ]; then
 	args "$@"
 fi

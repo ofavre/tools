@@ -17,7 +17,7 @@ gitgrep() {
     fi
 }
 
-if [ "$(basename "$0")" = "gitgrep" ]; then
+if [ "$(basename -- "$0")" = "gitgrep" ]; then
 	gitgrep "$@"
 elif type _longopt >/dev/null 2>&1; then
 	# Bash completion

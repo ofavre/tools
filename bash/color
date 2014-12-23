@@ -47,6 +47,6 @@ color() {
 }
 
 
-if [ "$(basename "$0")" = "color" ]; then
+if [ "$(basename -- "$0")" = "color" ]; then
 	color "$@"
 fi

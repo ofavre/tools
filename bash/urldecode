@@ -24,6 +24,6 @@ urldecode() {
     fi | sed "${RULES[@]}" | xargs -d '\n' -l printf
 }
 
-if [ "$(basename "$0")" = "urldecode" ]; then
+if [ "$(basename -- "$0")" = "urldecode" ]; then
     urldecode "$@"
 fi

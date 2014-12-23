@@ -12,6 +12,6 @@ clip() {
     xclip -selection clipboard "$@"
 }
 
-if [ "$(basename "$0")" = "clip" ]; then
+if [ "$(basename -- "$0")" = "clip" ]; then
 	clip "$@"
 fi

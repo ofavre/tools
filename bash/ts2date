@@ -40,6 +40,6 @@ ts2date() {
 }
 
 
-if [ "$(basename "$0")" = "ts2date" ]; then
+if [ "$(basename -- "$0")" = "ts2date" ]; then
 	ts2date "$@"
 fi

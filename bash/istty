@@ -5,6 +5,6 @@ istty() {
     return $?
 }
 
-if [ "$(basename "$0")" = "istty" ]; then
+if [ "$(basename -- "$0")" = "istty" ]; then
 	istty "$@"
 fi
