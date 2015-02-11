@@ -12,6 +12,13 @@
 *.bib diff=bibtex
 *.tex diff=tex
 
+# see http://stackoverflow.com/a/11291001/508831
+# Requires the gettext package, and following conf in .gitconfig:
+# [diff "po"]
+#     textconv=msgcat --no-location --no-wrap --sort-output
+*.po  diff=po
+*.pot diff=po
+
 *.c   diff=cpp
 *.h   diff=cpp
 *.hdl diff=cpp

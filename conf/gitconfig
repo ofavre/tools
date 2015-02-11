@@ -5,6 +5,9 @@
 [diff]
 	noprefix
 	renames = copies
+[diff "po"]
+	# see http://stackoverflow.com/a/11291001/508831
+	textconv=msgcat --no-location --no-wrap --sort-output
 [grep]
 	lineNumber = true
 	extendedRegexp = true
