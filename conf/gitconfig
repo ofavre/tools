@@ -43,7 +43,8 @@
 	rv = remote -v
 	l = log
 	ff = merge --ff-only
+	ffom = merge --ff-only origin/master
 	f = fetch
 	rb = rebase --committer-date-is-author-date
 	rbom = rebase --committer-date-is-author-date origin/master
-	pom = push origin master
+	pom = push origin masteR
