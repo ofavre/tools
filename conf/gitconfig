@@ -2,6 +2,7 @@
 	ui = true
 [core]
 	pager = less -+$LESS -RS
+	editor = vim
 [diff]
 	noprefix
 	renames = copies
