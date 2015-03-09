@@ -47,4 +47,4 @@
 	f = fetch
 	rb = rebase --committer-date-is-author-date
 	rbom = rebase --committer-date-is-author-date origin/master
-	pom = push origin masteR
+	pom = push origin master
