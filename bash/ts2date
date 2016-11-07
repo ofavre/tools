@@ -25,9 +25,9 @@ ts2date() {
 					(( ts /= 1000 ))
 					(( shifted++ ))
 				done
-				if [ $shifted -ne 0 ]; then
-					echo "Number too high, taken as ${units[$shifted]}" >&2
-				fi
+				#if [ $shifted -ne 0 ]; then
+				#	echo "Number too high, taken as ${units[$shifted]}" >&2
+				#fi
 				if [ "${#args[@]}" -gt 0 ]; then
 					date "${args[@]}" --date=@$ts
 				else
