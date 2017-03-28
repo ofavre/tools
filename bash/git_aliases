@@ -21,24 +21,20 @@ _git_prefixed_git() { autoprefixed_git "git"; }
 # but watch for system commands, bash builtins, functions and aliases conflicts
 git_aliases() {
     prefixes=('' 'g' 'git') # must have the associated _${prefix}_prefixed_git() functions
-    local git_commands="$(
+    git_commands=( $(
         ( LC_ALL="C" git help --all | awk 'BEGIN { bin=0 }; bin==2 && /^$/ { bin=0 }; /^  [^ ]/ { bin = 2; for(i=1;i<=NF;++i) print $i } ; bin==0 && /^available git commands/ { bin=1 }'
           git config --global --get-regexp 'alias\..*' | sed -e 's/^alias\.\([^ ]*\) .*$/\1/'
-        ) | sort
-    )"
+        ) | sort) )
     for prefix in "${prefixes[@]}"; do
         complfunction="_${prefix}_prefixed_git"
-        for cmd in $git_commands; do
+        for cmd in "${git_commands[@]}"; do
             if ! type "$prefix$cmd" >/dev/null 2>&1; then
                 alias "$prefix$cmd"="git $cmd"
-                complete -o bashdefault -o default -o nospace -F $complfunction $prefix$cmd 2>/dev/null \
-                    || complete -o default -o nospace -F $complfunction $prefix$cmd
+                if [ -n "$BASH_VERSION" ]; then
+                    complete -o bashdefault -o default -o nospace -F $complfunction $prefix$cmd 2>/dev/null \
+                        || complete -o default -o nospace -F $complfunction $prefix$cmd
+                fi
             fi
         done
     done
 }
-
-if [ "$(basename -- "$0")" = "git_aliases" ]; then
-    # Install the aliases
-    git_aliases
-fi
