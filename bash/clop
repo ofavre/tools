@@ -1,0 +1,15 @@
+#!/bin/bash
+
+clop() {
+    if [ "$1" == "--help" -o "$1" == "-h" ]; then
+        echo "Usage: clop" >&1
+	echo "Outputs clipboard content." >&1
+	echo "Tiny wrapper around xclip, merely adding \`\`-selection clipboard -o'' arguments." >&1
+        return
+    fi
+    xclip -selection clipboard -o "$@"
+}
+
+if [ "$(basename -- "$0")" = "clop" ]; then
+	clop "$@"
+fi
