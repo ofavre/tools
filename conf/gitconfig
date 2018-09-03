@@ -47,6 +47,7 @@
 	ff = merge --ff-only
 	ffom = merge --ff-only origin/master
 	f = fetch
+	fa = fetch --all
 	rb = rebase --committer-date-is-author-date
 	rbom = rebase --committer-date-is-author-date origin/master
 	pom = push origin master
