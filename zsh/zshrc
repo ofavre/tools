@@ -1,0 +1,60 @@
+RPROMPT="%(?,,%B%F{red}✗%?%b )%B%F{black}%*%b%f"
+PROMPT="%F{blue}%40<…<%~%f%(!,%F{red},%B%F{black})%#%f%b "
+
+# enable color support of ls and also add handy aliases
+if [ -x /usr/bin/dircolors ]; then
+    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+    alias ls='ls --color=auto'
+fi
+# some more ls aliases
+alias ll='ls -l'
+alias la='ls -A'
+alias l='ls -CF'
+
+alias ag='ag --case-sensitive --color-line-number 32 --color-match "1;31" --color-path 35 --pager "less -RS"'
+
+### [BEGIN] Add command timing ###
+# Adapted from https://github.com/popstas/zsh-command-time/
+setopt promptsubst # otherwise we cannot add variables to the prompt
+RPROMPT="\${ZSH_COMMAND_TIME_FORMATTED} $RPROMPT"
+export ZSH_COMMAND_TIME_MIN_MS=0
+#export ZSH_COMMAND_TIME_MSG="\xe2\x8c\x9b %s" # avoid too-large unicode characters
+export ZSH_COMMAND_TIME_MSG="+%s"
+export ZSH_COMMAND_TIME_COLOR="yellow"
+zmodload zsh/datetime # makes $EPOCHREALTIME available, for subsecond timing without starting processes like /bin/date
+_command_time_preexec() {
+  timer=${timer:-$EPOCHREALTIME}
+  export ZSH_COMMAND_TIME=""
+  export ZSH_COMMAND_TIME_FORMATTED=""
+}
+_command_time_precmd() {
+  if [ $timer ]; then
+    timer_show=$(($EPOCHREALTIME - $timer))
+    typeset -i ms
+    ms=$(($timer_show * 1000))
+    if [ -n "$TTY" ] && [ $ms -ge ${ZSH_COMMAND_TIME_MIN_MS:-3000} ]; then
+      export ZSH_COMMAND_TIME="$timer_show"
+      if [ ! -z ${ZSH_COMMAND_TIME_MSG} ]; then
+        zsh_command_time
+      fi
+    fi
+    unset timer
+  fi
+}
+zsh_command_time() {
+  if [ -n "$ZSH_COMMAND_TIME" ]; then
+    typeset -i ms
+    ms="$(($ZSH_COMMAND_TIME*1000))"
+    if [ $ms -lt 60000 ]; then
+      timer_show="$(printf "%d.%03d\"\n" $(($ms%60000/1000)) $(($ms%1000)))"
+    elif [ $ms -lt 3600000 ]; then
+      timer_show="$(printf "%02d'%02d.%03d\"\n" $(($ms%3600000/60000)) $(($ms%60000/1000)) $(($ms%1000)))"
+    else
+      timer_show="$(printf "%d:%02d'%02d.%03d\"\n" $(($ms/3600000)) $(($ms%3600000/60000)) $(($ms%60000/1000)) $(($ms%1000)))"
+    fi
+    ZSH_COMMAND_TIME_FORMATTED="%F{${ZSH_COMMAND_TIME_COLOR-"white"}}$(printf "${ZSH_COMMAND_TIME_MSG-"Time: %s"}\n" "$timer_show")%f"
+  fi
+}
+precmd_functions+=(_command_time_precmd)
+preexec_functions+=(_command_time_preexec)
+### [END] Add command timing ###
