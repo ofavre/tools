@@ -5,6 +5,7 @@
 	editor = vim
 [push]
 	default = simple
+	recurseSubmodules=on-demand
 [diff]
 	noprefix
 	renames = copies
