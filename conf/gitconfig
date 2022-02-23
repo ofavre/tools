@@ -17,9 +17,9 @@
 	oops = blame
 	wdiff = diff --color-words
 	wshow = show --color-words
-	graph = log --graph --oneline --date-order --format='%C(yellow)%h%Creset%Cred%d%Creset %C(blue)-%Creset %s (%C(bold)%an%Creset, %C(cyan)%cr%Creset)'
-	g     = log --graph --oneline --date-order --format='%C(yellow)%h%Creset%Cred%d%Creset %C(blue)-%Creset %s (%C(bold)%an%Creset, %C(cyan)%cr%Creset)'
-	ga    = log --graph --oneline --date-order --format='%C(yellow)%h%Creset%Cred%d%Creset %C(blue)-%Creset %s (%C(bold)%an%Creset, %C(cyan)%cr%Creset)' --all
+	graph = log --graph --oneline --date-order --date=relative --format='%C(blue)%ci%Creset %C(yellow)%h%Creset%C(auto)%d%Creset %C(blue)-%Creset %s (%C(bold)%an%Creset, %C(cyan)%cd%Creset)'
+	g     = log --graph --oneline --date-order --date=relative --format='%C(blue)%ci%Creset %C(yellow)%h%Creset%C(auto)%d%Creset %C(blue)-%Creset %s (%C(bold)%an%Creset, %C(cyan)%cd%Creset)'
+	ga    = log --graph --oneline --date-order --date=relative --format='%C(blue)%ci%Creset %C(yellow)%h%Creset%C(auto)%d%Creset %C(blue)-%Creset %s (%C(bold)%an%Creset, %C(cyan)%cd%Creset)' --all
 	b = branch
 	bav = branch -avv
 	s = status
