@@ -3,6 +3,8 @@
 [core]
 	pager = less -+$LESS -RS
 	editor = vim
+[push]
+	default = simple
 [diff]
 	noprefix
 	renames = copies
