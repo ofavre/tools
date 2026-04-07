@@ -2,14 +2,19 @@
 
 clop() {
     if [ "$1" == "--help" -o "$1" == "-h" ]; then
-        echo "Usage: clop" >&1
-	echo "Outputs clipboard content." >&1
-	echo "Tiny wrapper around xclip, merely adding \`\`-selection clipboard -o'' arguments." >&1
+        echo "Usage: $(basename "$0") […]" >&1
+        echo "Outputs clipboard content." >&1
+        echo "Tiny wrapper around xclip, merely adding \`\`-selection clipboard -o'' arguments." >&1
+        echo "Calls wl-paste under Wayland." >&1
         return
     fi
-    xclip -selection clipboard -o "$@"
+    if which wl-paste >/dev/null 2>&1; then
+        wl-paste "$@"
+    else
+        xclip -selection clipboard -o "$@"
+    fi
 }
 
-if [ "$(basename -- "$0")" = "clop" ]; then
-	clop "$@"
+if [ "$(basename -- "$0")" = "clop" ] || [ "$(basename -- "$0")" = "pbpaste" ]; then
+    clop "$@"
 fi

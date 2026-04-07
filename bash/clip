@@ -2,16 +2,19 @@
 
 clip() {
     if [ "$1" == "--help" -o "$1" == "-h" ]; then
-        echo "Usage: clip [file]" >&1
-        echo "       clip -o" >&1
-	echo "Tiny wrapper around xclip, merely adding \`\`-selection clipboard'' argument." >&1
-	echo "    [file]     Sets clipboard content with the given file, or standard input." >&1
-	echo "    -o         Outputs clipboard content." >&1
+        echo "Usage: $(basename "$0") […]" >&1
+        echo "Sets clipboard content." >&1
+        echo "Tiny wrapper around xclip, merely adding \`\`-selection clipboard'' argument." >&1
+        echo "Calls wl-copy under Wayland." >&1
         return
     fi
-    xclip -selection clipboard "$@"
+    if which wl-copy >/dev/null 2>&1; then
+        wl-copy "$@"
+    else
+        xclip -selection clipboard "$@"
+    fi
 }
 
-if [ "$(basename -- "$0")" = "clip" ]; then
-	clip "$@"
+if [ "$(basename -- "$0")" = "clip" ] || [ "$(basename -- "$0")" = "pbcopy" ]; then
+    clip "$@"
 fi
